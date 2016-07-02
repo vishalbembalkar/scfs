@@ -1,0 +1,7 @@
+made sure mkdir runs
+tried adding a specific system call that can classify 
+doing so, makes the fileystem "NOT SMART" 
+MUST AUTOMATE CLASSIFICATION : 
+	classify where nodes are generated. 
+	must check mime type. 
+	
