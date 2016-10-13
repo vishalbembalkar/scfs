@@ -1,0 +1,1 @@
+poizen: argv will include any spaces that actually got passed to your script. Your shell will almost certainly not pass any that aren't escaped or quoted.

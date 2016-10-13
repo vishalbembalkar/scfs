@@ -22,8 +22,3 @@ $df -h -T
 
 NOTETOSELF: 
 	
->	changed scfs.c to classify at utime
-
->	changed newextractor.py to accept series and also music files which don't have enough metadata but they have information
-	in their names. 
-

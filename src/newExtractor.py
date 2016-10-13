@@ -146,15 +146,17 @@ def classify(path,rootdir): # add an extra argument here to take the root dir  :
             if episode < 9:
                 episode = '0' + str(episode)
             valueofsetx = '/series/' + str(getdata.genre) + '/' + str(getdata.title)+'/Season '+ season+'/'\
-                          + str(getdata.title) +' S0'+season+'e'+episode+'.'+extension[1]
+                          + str(getdata.title) +' S0'+season+episode+'.'+extension[1]
             valueofsetx_withoutfilename = '/series/' + str(getdata.genre) + '/' + str(getdata.title)+'/Season '+ season+'/'
             default_path_for_series = rootdir + valueofsetx_withoutfilename
+
+            #destination = default_path_for_series + 'Episode ' + str(season['episode']) + '.' + extension[1]
+
             destination = default_path_for_series
-            print 'doo',destination
+            print 'dest',destination
             if path != destination:
                 cmd = default_path_for_series
                 try:
-                    print 'cmd',cmd
                     os.makedirs(cmd, 0755)
                 except OSError as e:
                     if e.errno == 17:
@@ -173,8 +175,9 @@ def classify(path,rootdir): # add an extra argument here to take the root dir  :
                             shutil.move(file, default_path_for_series)
                 except:
                     pass
+                
                 destination = rootdir + valueofsetx
-                #shutil.move(path, destination)
+                shutil.move(path, destination)
                 print 'file moved to dir ', destination
         '''getdata = omdb.request(t=f['title'], y=f['year'], r='xml')
         root = ET.fromstring(getdata.content)
@@ -272,10 +275,12 @@ def classify(path,rootdir): # add an extra argument here to take the root dir  :
                         os.chmod(cmd,0755)
                 shutil.move(path, destination)
                 print 'file moved to dir ', destination
+                
     try:
         xattr.setxattr(destination, 'user.fpath', valueofsetx)
         xattr.setxattr(destination, 'user.scfsC', 'Y')
     except IOError:
+        print 'failed to add attributes' 
         pass
 
 path = sys.argv[1]
@@ -287,11 +292,9 @@ try:
 
         fpath = xattr.getxattr(path, 'user.fpath')
         fpath = rootdir+fpath
-        print fpath
         print 'moving directly to: ',fpath
         cmd = fpath.rsplit('/',1)
         fname = cmd[1]
-        print cmd
         print fname
         cmd = cmd[0]+'/'
         print cmd
@@ -301,10 +304,7 @@ try:
             if e.errno == 17:
                 os.chmod(cmd, 0755)
         print fpath
-        try:
-            shutil.move(path, fpath)
-        except:
-            classify(path, rootdir)
+        shutil.move(path, fpath)
         exit(1)
 except IndexError:
     pass
